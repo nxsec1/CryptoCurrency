@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.fdm.CryptoCurrency.api.DataView;
-import com.fdm.CryptoCurrency.api.LatestRates;
+import com.fdm.CryptoCurrency.api.CurrencyDetail;
 
 public class LatestRatesTest {
 
@@ -22,11 +22,11 @@ public class LatestRatesTest {
 	private static final String VALID_URL="https://api.exchangeratesapi.io/history?start_at=2018-01-01&end_at=2018-01-04&base=AUD";
 	private static final String INVALID_URL="https://api.exchangeratesapi.io/history?start_at=2018-01-01&end_at=2018-01-04&base=NOTREAL";
 	private static final String LATEST="https://api.exchangeratesapi.io/latest";
-	private static LatestRates lr;
+	private static CurrencyDetail lr;
 
 	@BeforeClass
 	public static void init() {
-		lr = new LatestRates();
+		lr = new CurrencyDetail();
 	}
 	
 	@Test

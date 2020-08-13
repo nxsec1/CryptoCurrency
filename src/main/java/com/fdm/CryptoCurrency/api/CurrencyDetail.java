@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-public class LatestRates extends DataView {
+public class CurrencyDetail extends DataView {
 	private String id;
 	private Map<String,Double> market_cap;
 	
@@ -18,7 +18,7 @@ public class LatestRates extends DataView {
 		this.market_cap = market_cap;
 	}
 
-	public LatestRates() {
+	public CurrencyDetail() {
 		super();
 		this.market_cap = new HashMap<>();
 	}
@@ -34,7 +34,7 @@ public class LatestRates extends DataView {
 
 	@Override
 	public DataView processData(JSONObject obj) {
-		LatestRates lr = new LatestRates();
+		CurrencyDetail lr = new CurrencyDetail();
 		String id = (String) obj.get("id");
 //		JSONObject rates = (JSONObject) obj.get("market_cap");
 //		for (String name : rates.keySet()) {

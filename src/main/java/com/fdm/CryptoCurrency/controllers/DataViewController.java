@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fdm.CryptoCurrency.api.CorrelatedRates;
 import com.fdm.CryptoCurrency.api.DataView;
 import com.fdm.CryptoCurrency.api.HistoricalRates;
-import com.fdm.CryptoCurrency.api.LatestRates;
+import com.fdm.CryptoCurrency.api.CurrencyDetail;
 
 @RestController
 public class DataViewController {
 
 	private HistoricalRates hr;
-	private LatestRates lr;
+	private CurrencyDetail cd;
 	private CorrelatedRates cr;
 
 	public DataViewController() {
 		super();
 		this.hr = new HistoricalRates();
-		this.lr = new LatestRates();
+		this.cd = new CurrencyDetail();
 		this.cr = new CorrelatedRates();
 	}
 
@@ -60,11 +60,11 @@ public class DataViewController {
 	@GetMapping(value = "/coin/{id}")
 	public DataView getLatest(@PathVariable String id) {
 
-		LatestRates latestRates = null;
+		CurrencyDetail latestRates = null;
 
 		String url = "https://api.coingecko.com/api/v3/coins/" + id;
 
-		latestRates = (LatestRates) lr.retrieveData(url);
+		latestRates = (CurrencyDetail) cd.retrieveData(url);
 		return latestRates;
 
 	}
