@@ -40,7 +40,7 @@ public abstract class DataView {
 
 			String res = new String(responseBody);
 			JSONObject obj = new JSONObject(res);
-			System.out.println(obj);
+//			System.out.println(obj);
 			processedData = processData(obj);
 			
 		} catch (HttpException e) {
