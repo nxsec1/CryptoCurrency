@@ -58,14 +58,14 @@ public class DataViewController {
 
 	
 	@GetMapping(value = "/coin/{id}")
-	public DataView getLatest(@PathVariable String id) {
+	public DataView getCurrencyDetail(@PathVariable String id) {
 
-		CurrencyDetail latestRates = null;
+		CurrencyDetail currencyDetail = null;
 
 		String url = "https://api.coingecko.com/api/v3/coins/" + id;
 
-		latestRates = (CurrencyDetail) cd.retrieveData(url);
-		return latestRates;
+		currencyDetail = (CurrencyDetail) cd.retrieveData(url);
+		return currencyDetail;
 
 	}
 
