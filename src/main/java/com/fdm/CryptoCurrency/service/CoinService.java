@@ -1,5 +1,6 @@
 package com.fdm.CryptoCurrency.service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.json.JSONObject;
@@ -31,9 +32,17 @@ public class CoinService {
 		JSONObject rates = (JSONObject) data.get("current_price");		
 		HashMap<String, String> current_price = new HashMap<String,String>();
 		for (String currency : rates.keySet()) {
-			current_price.put(currency, Long.toString(rates.getLong(currency)));
+			Double price =  rates.getDouble(currency);
+			current_price.put(currency,String.format("%.2f", price));
 		}
 		cd.setCurrent_price(current_price);
+		
+		JSONObject changes = (JSONObject) data.get("price_change_percentage_24h_in_currency");
+		HashMap<String, String> price_change = new HashMap<String,String>();
+		for (String currency : changes.keySet()) {
+			price_change.put(currency, Double.toString(changes.getDouble(currency)));
+		}
+		cd.setPrice_percentage_change_in_24hr(price_change);
 		return cd;
 	}
 	
