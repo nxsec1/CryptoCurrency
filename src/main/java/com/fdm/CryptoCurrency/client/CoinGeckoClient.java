@@ -1,4 +1,4 @@
-package com.fdm.CryptoCurrency.api;
+package com.fdm.CryptoCurrency.client;
 
 import java.io.IOException;
 
@@ -10,12 +10,13 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.json.JSONObject;
 
-public abstract class DataView {
-	
+import lombok.Data;
 
-	public DataView retrieveData(String url) {
-		
-		DataView processedData = null;
+@Data
+public class CoinGeckoClient {
+
+	public JSONObject getJson(String url) {
+		JSONObject obj = null;
 
 		// Create an instance of HttpClient.
 		HttpClient client = new HttpClient();
@@ -25,7 +26,7 @@ public abstract class DataView {
 
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
-//        method.addRequestHeader(headerKey);
+//		        method.addRequestHeader(headerKey);
 
 		try {
 			// Execute the method.
@@ -39,10 +40,8 @@ public abstract class DataView {
 			byte[] responseBody = method.getResponseBody();
 
 			String res = new String(responseBody);
-			JSONObject obj = new JSONObject(res);
-//			System.out.println(obj);
-			processedData = processData(obj);
-			
+			obj = new JSONObject(res);
+
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
 			e.printStackTrace();
@@ -53,10 +52,7 @@ public abstract class DataView {
 			// Release the connection.
 			method.releaseConnection();
 		}
-
-		return processedData;
+		
+		return obj;
 	}
-	
-	public abstract DataView processData(JSONObject obj);
-	
 }
