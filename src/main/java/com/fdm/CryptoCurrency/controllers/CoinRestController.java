@@ -1,9 +1,9 @@
 package com.fdm.CryptoCurrency.controllers;
 
-
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +14,8 @@ import com.fdm.CryptoCurrency.api.CryptoCurrency;
 import com.fdm.CryptoCurrency.api.CurrencyDetail;
 
 @RestController
+@Validated
+
 public class CoinRestController {
 	private CoinService coinService;
 	
@@ -25,9 +27,9 @@ public class CoinRestController {
 	}
 	
 	@GetMapping(value = "coins/market")
-	public ArrayList<CryptoCurrency> getAll(@RequestParam(defaultValue = "usd",name="currency") String currency, @RequestParam(defaultValue = "1",name="page") String page){
+	public ArrayList<CryptoCurrency> getAll(@RequestParam(defaultValue = "usd",name="currency") String currency, @RequestParam(name="page") Integer page){
 		
-		ArrayList<CryptoCurrency> cryptoCurrencys = coinService.getAll(currency,page);
+		ArrayList<CryptoCurrency> cryptoCurrencys = coinService.getAll(currency,Integer.toString(page));
 		
 		return cryptoCurrencys;
 	}
@@ -40,8 +42,6 @@ public class CoinRestController {
 		
 		currencyDetail = coinService.getCurrencyDetail(id);
 		return currencyDetail;
-	}
-	
-	
+	}	
 	
 }
