@@ -40,42 +40,47 @@ public class CoinService {
 		cd.setLast_update(formatDate(last_update.substring(0, 10)));
 
 		JSONObject rates = (JSONObject) data.get("current_price");
-		HashMap<String, String> current_price = new HashMap<String, String>();
-		for (String currency : rates.keySet()) {
-			Double price = rates.getDouble(currency);
-			current_price.put(currency, String.format("%.2f", price));
-		}
+		HashMap<String, String> current_price = getPrice(rates);
 		cd.setCurrent_price(current_price);
 
 		JSONObject changes = (JSONObject) data.get("price_change_percentage_24h_in_currency");
-		HashMap<String, String> price_change = getPrice(changes);
-		//		for (String currency : changes.keySet()) {
-//			price_change.put(currency, Double.toString(changes.getDouble(currency)));
-//		}
+		HashMap<String, String> price_change = getPriceChange(changes);
 		cd.setPrice_percentage_change_in_24hr(price_change);
 
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime then = now.minusDays(7);
 		String date = String.format(then.format(format));
+		
 		// https://api.coingecko.com/api/v3/coins/bitcoin/history?date=10-08-2020
-
 		JSONObject historyObj = new CoinGeckoClient()
 				.getJson("https://api.coingecko.com/api/v3/coins/" + id + "/history?date=" + date);
-		
+		JSONObject historyData = (JSONObject) historyObj.get("market_data");
+		JSONObject hisotryRates = (JSONObject) historyData.get("current_price");
+		HashMap<String, String> history_price = getPrice(hisotryRates);
+		cd.setLastWeek_price(history_price);
 		return cd;
 	}
 
 	public String formatDate(String dateString) {
 		LocalDate date = LocalDate.parse(dateString);
-		String formattedDate = date.format(DateTimeFormatter.ofPattern("dd-MM-yy"));
+		String formattedDate = date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		return formattedDate;
+	}
+	
+	public HashMap<String, String> getPriceChange(JSONObject obj){
+		HashMap<String, String> price = new HashMap<String, String>();
+		for (String currency : obj.keySet()) {
+			price.put(currency, Double.toString(obj.getDouble(currency)));
+		}
+		return price;
 	}
 	
 	public HashMap<String, String> getPrice(JSONObject obj){
 		HashMap<String, String> price = new HashMap<String, String>();
 		for (String currency : obj.keySet()) {
-			price.put(currency, Double.toString(obj.getDouble(currency)));
+			Double p = obj.getDouble(currency);
+			price.put(currency, String.format("%.2f", p));
 		}
 		return price;
 	}
