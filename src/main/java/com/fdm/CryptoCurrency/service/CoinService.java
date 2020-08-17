@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.fdm.CryptoCurrency.api.CryptoCurrency;
 import com.fdm.CryptoCurrency.api.CurrencyDetail;
 import com.fdm.CryptoCurrency.client.CoinGeckoClient;
 
@@ -61,6 +64,10 @@ public class CoinService {
 		cd.setLastWeek_price(history_price);
 		return cd;
 	}
+	
+	
+	
+	
 
 	public String formatDate(String dateString) {
 		LocalDate date = LocalDate.parse(dateString);
@@ -83,6 +90,33 @@ public class CoinService {
 			price.put(currency, String.format("%.2f", p));
 		}
 		return price;
+	}
+
+
+
+
+
+	public ArrayList<CryptoCurrency> getAll(String currency) {
+		//https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd
+		ArrayList<CryptoCurrency> cryptoCurrencys = new ArrayList<CryptoCurrency>();
+		//https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false
+		JSONArray array = new CoinGeckoClient().getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false");
+
+		//JSONArray array = new CoinGeckoClient().getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currency);
+		for(int i = 0; i < array.length(); i++){
+		    JSONObject obj = array.getJSONObject(i);
+		    CryptoCurrency cryptoCurrency = new CryptoCurrency();
+		    String id_name = (String) obj.get("id");
+		    cryptoCurrency.setId(id_name);
+
+			Double current_price = obj.getDouble("current_price");
+			cryptoCurrency.setCurrent_price(String.format("%.2f", current_price));
+
+			String market_cap = Long.toString(obj.getLong("market_cap"));
+			cryptoCurrency.setMarket_cap(market_cap);
+			cryptoCurrencys.add(cryptoCurrency);
+		}
+		return cryptoCurrencys;
 	}
 
 }
