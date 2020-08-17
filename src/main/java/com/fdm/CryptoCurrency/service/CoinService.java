@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.fdm.CryptoCurrency.api.CryptoCurrency;
 import com.fdm.CryptoCurrency.api.CurrencyDetail;
+import com.fdm.CryptoCurrency.api.StatusUpdate;
 import com.fdm.CryptoCurrency.client.CoinGeckoClient;
 
 @Service
@@ -65,9 +66,6 @@ public class CoinService {
 		return cd;
 	}
 	
-	
-	
-	
 
 	public String formatDate(String dateString) {
 		LocalDate date = LocalDate.parse(dateString);
@@ -92,10 +90,6 @@ public class CoinService {
 		return price;
 	}
 
-
-
-
-
 	public ArrayList<CryptoCurrency> getAll(String currency) {
 		//https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd
 		ArrayList<CryptoCurrency> cryptoCurrencys = new ArrayList<CryptoCurrency>();
@@ -114,6 +108,26 @@ public class CoinService {
 
 			String market_cap = Long.toString(obj.getLong("market_cap"));
 			cryptoCurrency.setMarket_cap(market_cap);
+			
+			//https://api.coingecko.com/api/v3/coins/bitcoin/status_updates
+			
+			JSONObject obj2 = new CoinGeckoClient().getJson("https://api.coingecko.com/api/v3/coins/" + id_name +"/status_updates");
+			JSONArray data = (JSONArray) obj2.get("status_updates");
+			if (data !=null) {
+				ArrayList<StatusUpdate> updates = new ArrayList<StatusUpdate>();
+				for(int j = 0; j < data.length(); j++){
+					StatusUpdate update = new StatusUpdate();
+				    JSONObject updateObj = data.getJSONObject(i);
+				    String title = (String) updateObj.get("user_title");
+				    update.setTitle(title);
+				    String description = (String) updateObj.get("description");
+				    update.setDescription(description);
+				    String created_at = (String) updateObj.get("created_at");
+					update.setCreated_at(formatDate(created_at.substring(0, 10)));
+					updates.add(update);
+				}
+				cryptoCurrency.setStatusUpdates(updates);
+			}
 			cryptoCurrencys.add(cryptoCurrency);
 		}
 		return cryptoCurrencys;
