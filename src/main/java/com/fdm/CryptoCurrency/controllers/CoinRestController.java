@@ -25,9 +25,9 @@ public class CoinRestController {
 	}
 	
 	@GetMapping(value = "coins/market")
-	public ArrayList<CryptoCurrency> getAll(@RequestParam(defaultValue = "usd") String currency){
+	public ArrayList<CryptoCurrency> getAll(@RequestParam(defaultValue = "usd",name="currency") String currency, @RequestParam(defaultValue = "1",name="page") String page){
 		
-		ArrayList<CryptoCurrency> cryptoCurrencys = coinService.getAll(currency);
+		ArrayList<CryptoCurrency> cryptoCurrencys = coinService.getAll(currency,page);
 		
 		return cryptoCurrencys;
 	}

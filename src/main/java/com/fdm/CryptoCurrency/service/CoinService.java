@@ -1,11 +1,9 @@
 package com.fdm.CryptoCurrency.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -90,13 +88,11 @@ public class CoinService {
 		return price;
 	}
 
-	public ArrayList<CryptoCurrency> getAll(String currency) {
+	public ArrayList<CryptoCurrency> getAll(String currency,String page) {
 		//https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd
 		ArrayList<CryptoCurrency> cryptoCurrencys = new ArrayList<CryptoCurrency>();
 		//https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false
-		JSONArray array = new CoinGeckoClient().getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false");
-
-		//JSONArray array = new CoinGeckoClient().getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currency);
+		JSONArray array = new CoinGeckoClient().getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currency +"&order=market_cap_desc&per_page=10&page="+page);
 		for(int i = 0; i < array.length(); i++){
 		    JSONObject obj = array.getJSONObject(i);
 		    CryptoCurrency cryptoCurrency = new CryptoCurrency();
@@ -117,7 +113,7 @@ public class CoinService {
 				ArrayList<StatusUpdate> updates = new ArrayList<StatusUpdate>();
 				for(int j = 0; j < data.length(); j++){
 					StatusUpdate update = new StatusUpdate();
-				    JSONObject updateObj = data.getJSONObject(i);
+				    JSONObject updateObj = data.getJSONObject(j);
 				    String title = (String) updateObj.get("user_title");
 				    update.setTitle(title);
 				    String description = (String) updateObj.get("description");
