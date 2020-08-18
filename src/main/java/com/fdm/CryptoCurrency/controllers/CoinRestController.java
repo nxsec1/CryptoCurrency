@@ -53,11 +53,6 @@ public class CoinRestController {
 		return currencyDetail;
 	}	
 	
-	@GetMapping(value = "/error")
-	public String error() {
-		return " No valid.\n Try http://localhost:8080/coins/market or http://localhost:8080/coins/{id} instead! \n Thanks!";
-	}	
-	
 	@ExceptionHandler(NotFoundCurrencyException.class)
 	public String notFoundCurrency() {
 		return "Currency Not Found! \nThe availiable currencies are JPY ,AUD , USD. \nTry http://localhost:8080/coins/market instead. \nThanks!";
