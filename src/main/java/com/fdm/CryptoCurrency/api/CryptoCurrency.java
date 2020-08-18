@@ -1,11 +1,14 @@
 package com.fdm.CryptoCurrency.api;
 import java.util.ArrayList;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CryptoCurrency {
 	private String id;
 	private String current_price;
