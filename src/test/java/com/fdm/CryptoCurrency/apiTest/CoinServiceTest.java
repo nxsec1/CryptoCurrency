@@ -25,6 +25,7 @@ public class CoinServiceTest {
 	@Test
 	public void test_getCurrencyDetail_returns_cd() {
 		CurrencyDetail cd = coinService.getCurrencyDetail("bitcoin");
+		
 		assertEquals("bitcoin",cd.getId());
 	}
 	
