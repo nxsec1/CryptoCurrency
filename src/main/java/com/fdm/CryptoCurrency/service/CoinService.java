@@ -23,7 +23,7 @@ public class CoinService {
 	public CurrencyDetail getCurrencyDetail(String id) {
 		CurrencyDetail cd = new CurrencyDetail();
 //		JSONObject obj = new CoinGeckoClient().getJson("https://api.coingecko.com/api/v3/coins/" + id);
-		JSONObject obj = new CoinGeckoClient().getJson("http://wiremock:8080/api/coins/" + id);
+		JSONObject obj = new CoinGeckoClient().getJson("http://wiremock:8080/coins/" + id);
 		String id_name = (String) obj.get("id");
 		cd.setId(id_name);
 
@@ -60,7 +60,7 @@ public class CoinService {
 		// https://api.coingecko.com/api/v3/coins/bitcoin/history?date=10-08-2020
 //		JSONObject historyObj = new CoinGeckoClient()
 //				.getJson("https://api.coingecko.com/api/v3/coins/" + id + "/history?date=" + date);
-		JSONObject historyObj = new CoinGeckoClient().getJson("http://wiremock:8080/api/coins/bitcoin/history");
+		JSONObject historyObj = new CoinGeckoClient().getJson("http://wiremock:8080/coins/bitcoin/history");
 		JSONObject historyData = (JSONObject) historyObj.get("market_data");
 		JSONObject hisotryRates = (JSONObject) historyData.get("current_price");
 		HashMap<String, String> history_price = getPrice(hisotryRates);
@@ -104,7 +104,7 @@ public class CoinService {
 //		JSONArray array = new CoinGeckoClient()
 //				.getJsonArray("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currency
 //						+ "&order=market_cap_desc&per_page=10&page=" + page);
-		JSONArray array = new CoinGeckoClient().getJsonArray("http://wiremock:8080/api/coins/market?currency="+currency+"&page="+page);
+		JSONArray array = new CoinGeckoClient().getJsonArray("http://wiremock:8080/coins/market?currency="+currency+"&page="+page);
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject obj = array.getJSONObject(i);
 			CryptoCurrency cryptoCurrency = new CryptoCurrency();
